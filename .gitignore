@@ -1,0 +1,8 @@
+_posts/
+env/
+.DS_Store
+
+project/db.sqlite3
+project/app/__pycache__/
+project/app/migrations/
+project/project/__pycache__/
