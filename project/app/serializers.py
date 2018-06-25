@@ -5,7 +5,7 @@ class MemoSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(max_length=100)
     content = serializers.CharField()
-    created = serializers.DateTimeField()
+    created = serializers.ReadOnlyField()
 
     def create(self, validated_data):
         return Memo.objects.create(**validated_data)
