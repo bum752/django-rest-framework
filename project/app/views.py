@@ -5,24 +5,37 @@ from app.serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from app.permissions import IsOwnerOrReadOnly
+from rest_framework import viewsets
 
-class MemoList(generics.ListCreateAPIView):
-    queryset = Memo.objects.all()
-    serializer_class = MemoSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-class MemoDetail(generics.RetrieveUpdateDestroyAPIView):
+class MemoViewSet(viewsets.ModelViewSet):
     queryset = Memo.objects.all()
     serializer_class = MemoSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
-class UserList(generics.GenericAPIView):
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class UserDetail(generics.GenericAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+# class MemoList(generics.ListCreateAPIView):
+#     queryset = Memo.objects.all()
+#     serializer_class = MemoSerializer
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+#
+# class MemoDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Memo.objects.all()
+#     serializer_class = MemoSerializer
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
+# class UserList(generics.GenericAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+# class UserDetail(generics.GenericAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
 
 # class MemoList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
 #     queryset = Memo.objects.all()
